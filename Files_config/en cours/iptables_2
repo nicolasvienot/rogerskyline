@@ -1,0 +1,40 @@
+#!/bin/bash
+
+#Let's flush everything
+sudo iptables -F
+sudo iptables -X
+
+#SET DEFAULT POLICY
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD
+sudo iptables -P OUTPUT ACCEPT
+
+# Droping all invalid packets
+sudo iptables -A INPUT -m state --state INVALID -j DROP
+sudo iptables -A FORWARD -m state --state INVALID -j DROP
+sudo iptables -A OUTPUT -m state --state INVALID -j DROP
+
+#ACCEPT CONNECTION ORIGINATED FROM INSIDE
+sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+#ACCEPT SSH
+sudo iptables -A INPUT -p TCP --dport 55555 -j ACCEPT
+#ACCEPT HTTP
+sudo iptables -A INPUT -p TCP --dport 80 -j ACCEPT
+#ACCEPT HTTPS
+sudo iptables -A INPUT -p TCP --dport 443 -j ACCEPT
+
+#PORT SCAN
+sudo iptables -A INPUT -p TCP -m state --state NEW -m recent --set
+sudo iptables -A INPUT -p TCP -m state --state NEW -m recent --update --seconds 1 --hitcount 10 -j DROP
+
+#DOS This rule limits the ammount of connections from the same IP in a short time
+#SSH
+sudo iptables -I INPUT -p TCP --dport 55555 -i enp0s3 -m state --state NEW -m recent --set
+sudo iptables -I INPUT -p TCP --dport 55555 -i enp0s3 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
+#HTTP
+sudo iptables -I INPUT -p TCP --dport 80 -i enp0s3 -m state --state NEW -m recent --set
+sudo iptables -I INPUT -p TCP --dport 80 -i enp0s3 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
+#HTTPS
+sudo iptables -I INPUT -p TCP --dport 443 -i enp0s3 -m state --state NEW -m recent --set
+sudo iptables -I INPUT -p TCP --dport 443 -i enp0s3 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP

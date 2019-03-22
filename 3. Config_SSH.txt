@@ -16,3 +16,5 @@
 -- sudo vim .ssh/authorized_keys -> paste pub key 
 -- replace password autentification yes to no on etc/ssh/sshd_config
 -- sudo service ssh restart
+
+DONE

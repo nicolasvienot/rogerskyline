@@ -1,0 +1,206 @@
+#!/bin/bash
+
+#
+SSH_PORT=55555
+HTTP_PORT=80
+HTTPS_PORT=443
+FILE="/home/nico/init.log"
+##Firewall rules
+#SET DEFAULT POLICY
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD DROP
+sudo iptables -P OUTPUT ACCEPT
+#ACCEPT CONNECTION ORIGINATED FROM INSIDE
+sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+#ACCEPT SSH
+sudo iptables -A INPUT -p TCP --dport ${SSH_PORT} -j ACCEPT
+#ACCEPT HTTP
+sudo iptables -A INPUT -p TCP --dport ${HTTP_PORT} -j ACCEPT
+#ACCEPT HTTPS
+sudo iptables -A INPUT -p TCP --dport ${HTTPS_PORT} -j ACCEPT
+echo Firewall rules set. > ${FILE}
+##PORT SCAN
+sudo iptables -A INPUT -p TCP -m state --state NEW -m recent --set
+sudo iptables -A INPUT -p TCP -m state --state NEW -m recent --update --seconds 1 --hitcount 10 -j DROP
+echo Scan protection enabled. >> ${FILE}
+##DOS
+
+
+#!/bin/sh
+#
+#
+# Script is for stoping Portscan and smurf attack
+### first flush all the iptables Rules
+iptables -F
+# INPUT iptables Rules
+# Accept loopback input
+iptables -A INPUT -i lo -p all -j ACCEPT
+# allow 3 way handshake
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+### DROPspoofing packets
+#iptables -A INPUT -s 10.0.0.0/8 -j DROP
+#iptables -A INPUT -s 169.254.0.0/16 -j DROP
+#iptables -A INPUT -s 172.16.0.0/12 -j DROP
+#iptables -A INPUT -s 127.0.0.0/8 -j DROP
+#iptables -A INPUT -s 192.168.0.0/24 -j DROP
+#iptables -A INPUT -s 224.0.0.0/4 -j DROP
+#iptables -A INPUT -d 224.0.0.0/4 -j DROP
+#iptables -A INPUT -s 240.0.0.0/5 -j DROP
+#iptables -A INPUT -d 240.0.0.0/5 -j DROP
+#iptables -A INPUT -s 0.0.0.0/8 -j DROP
+#iptables -A INPUT -d 0.0.0.0/8 -j DROP
+#iptables -A INPUT -d 239.255.255.0/24 -j DROP
+#iptables -A INPUT -d 255.255.255.255 -j DROP
+#for SMURF attack protection
+iptables -A INPUT -p icmp -m icmp --icmp-type address-mask-request -j DROP
+iptables -A INPUT -p icmp -m icmp --icmp-type timestamp-request -j DROP
+#iptables -A INPUT -p icmp -m icmp -m limit --limit 1/second -j ACCEPT
+# Droping all invalid packets
+iptables -A INPUT -m state --state INVALID -j DROP
+iptables -A FORWARD -m state --state INVALID -j DROP
+iptables -A OUTPUT -m state --state INVALID -j DROP
+# flooding of RST packets, smurf attack Rejection
+iptables -A INPUT -p tcp -m tcp --tcp-flags RST RST -m limit --limit 2/second --limit-burst 2 -j ACCEPT
+# Protecting portscans
+# Attacking IP will be locked for 24 hours (3600 x 24 = 86400 Seconds)
+iptables -A INPUT -m recent --name portscan --rcheck --seconds 86400 -j DROP
+iptables -A FORWARD -m recent --name portscan --rcheck --seconds 86400 -j DROP
+# Remove attacking IP after 24 hours
+iptables -A INPUT -m recent --name portscan --remove
+iptables -A FORWARD -m recent --name portscan --remove
+# These rules add scanners to the portscan list, and log the attempt.
+iptables -A INPUT -p tcp -m tcp --dport 139 -m recent --name portscan --set -j LOG --log-prefix "portscan:"
+iptables -A INPUT -p tcp -m tcp --dport 139 -m recent --name portscan --set -j DROP
+iptables -A FORWARD -p tcp -m tcp --dport 139 -m recent --name portscan --set -j LOG --log-prefix "portscan:"
+iptables -A FORWARD -p tcp -m tcp --dport 139 -m recent --name portscan --set -j DROP
+# Allow the following ports through from outside
+iptables -A INPUT -p tcp -m tcp --dport 25 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 55555 -j ACCEPT
+# Allow ping means ICMP port is open (If you do not want ping replace ACCEPT with REJECT)
+iptables -A INPUT -p icmp -m icmp --icmp-type 8 -j ACCEPT
+#test
+iptables -I INPUT -p tcp --dport 55555 -m state --state NEW -m recent --set
+iptables -I INPUT -p tcp --dport 55555 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
+#iptables -A INPUT -p tcp --syn -m limit --limit 1/s -j ACCEPT
+#iptables -A INPUT -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT
+#iptables -A INPUT -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT
+#iptables -A INPUT -m limit --limit 2/second --dport 80 --syn -j ACCEPT
+iptables -I INPUT -m state --state NEW -m recent --update --seconds 20 --hitcount 4 -j DROP
+iptables -A INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 3 -j RETURN
+# Lastly reject All INPUT traffic
+iptables -A INPUT -j REJECT
+################# Below are for OUTPUT iptables rules #############################################
+## Allow loopback OUTPUT
+iptables -A OUTPUT -o lo -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+# Allow the following ports through from outside
+# SMTP = 25
+# DNS = 53
+# HTTP = 80
+# HTTPS = 443
+# SSH = 22
+#iptables -A INPUT -p tcp --dport 55555 -m hashlimit --hashlimit-upto 50/min --hashlimit-burst 500 --hashlimit-mode srcip --hashlimit-name http -j ACCEPT
+#iptables -A INPUT -p tcp --dport 55555 -j DROP
+### You can also add or remove port no. as per your requirement
+iptables -A OUTPUT -p tcp -m tcp --dport 25 -j ACCEPT
+iptables -A OUTPUT -p tcp -m tcp --dport 80 -j ACCEPT
+iptables -A OUTPUT -p tcp -m tcp --dport 55555 -j ACCEPT
+# Allow pings
+iptables -A OUTPUT -p icmp -m icmp --icmp-type 8 -j ACCEPT
+# Lastly Reject all Output traffic
+#iptables -A OUTPUT -j REJECT
+## Reject Forwarding  traffic
+#iptables -A FORWARD -j REJECT
+
+#!/bin/bash
+
+# DROP ALL
+iptables -F
+iptables -X
+
+# Interdire
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+
+# ping local
+iptables -t filter -A OUTPUT -o lo -j ACCEPT
+iptables -t filter -A INPUT -i lo -j ACCEPT
+
+# ping intra
+iptables -A INPUT -i enp0s3 -p icmp -j ACCEPT
+iptables -A OUTPUT -o enp0s3 -p icmp -j ACCEPT
+
+# DNS
+iptables -t filter -A OUTPUT -p udp --dport 53 -m conntrack\
+	--ctstate NEW -j ACCEPT
+iptables -t filter -A OUTPUT -p udp --dport 53 -m conntrack\
+	--ctstate ESTABLISHED -j ACCEPT
+
+# Web
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
+iptables -t filter -A OUTPUT -p tcp -m multiport\
+	--dports 80,443,55555 -m conntrack --ctstate NEW,ESTABLISHED\
+	-j ACCEPT
+iptables -t filter -A INPUT -p tcp -m multiport\
+	--sports 80,443,55555 -m conntrack --ctstate ESTABLISHED\
+	-j ACCEPT
+
+# FTP
+#iptables -t raw -A PREROUTING -p tcp --dport 21 -j CT --helper ftp
+#iptables -A OUTPUT -p tcp --sport 20 -m conntrack --ctstate \
+	#	RELATED,ESTABLISHED -j ACCEPT
+
+
+#SSH
+iptables -A INPUT -i enp0s3 -p tcp --dport 66 -m state --state NEW,ESTABLISHED\
+	-j ACCEPT
+iptables -A OUTPUT -o enp0s3 -p tcp --sport 66 -m state --state ESTABLISHED\
+	-j ACCEPT
+iptables -A OUTPUT -o enp0s3 -p tcp --dport 66 -j ACCEPT
+
+################ PROTECT DOS ################
+
+# DROP Invalid packets
+iptables -t mangle -A PREROUTING -m conntrack --ctstate INVALID -j DROP
+
+# DROP TCP packets if not SYN
+iptables -t mangle -A PREROUTING -p tcp ! --syn -m conntrack --ctstate NEW -j DROP
+
+# DROP SYN packets si des valeurs MSS douteuses
+iptables -t mangle -A PREROUTING -p tcp -m conntrack --ctstate NEW\
+	-m tcpmss ! --mss 536:65535 -j DROP
+
+# BLOCK TCP FLAGS
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags \FIN,SYN,RST,PSH,ACK,URG NONE -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags FIN,SYN FIN,SYN -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags FIN,RST FIN,RST -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags FIN,ACK FIN,ACK -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags ACK,URG ACK,URG -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags ACK,FIN ACK,FIN -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags ACK,PSH ACK,PSH -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL ALL -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL NONE -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL FIN,PSH,URG -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL SYN,FIN,PSH,URG -j DROP
+#iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG -j DROP
+
+# Limit connections
+iptables -A INPUT -p tcp -m connlimit --connlimit-above 111 -j REJECT --reject-with tcp-reset
+
+# Limit new TCP connections
+iptables -A INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 3 -j RETURN
+iptables -A INPUT -p tcp -m conntrack --ctstate NEW -j DROP
+
+# SSH protect
+iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -m recent --set
+iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -m recent --update --seconds 60 --hitcount 3 -j DROP
+
+# Protect port scanning
+iptables -N port-scanning
+iptables -A port-scanning -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit\
+	--limit-burst 2 -j RETURN
+iptables -A port-scanning -j DROP

@@ -7,3 +7,12 @@ IPTABLES
 
 FAIL2BAN
 
+-- log_paths to create
+sudo touch /var/log/apache2/server.log
+sudo touch /var/log/apache2/server.log
+sudo touch /var/log/apache2/server.log
+
+sudo vim /etc/fail2ban/jail.local
+sudo vim /etc/fail2ban/filter.d/http-get-dos.conf
+
+Sudo iptables -L

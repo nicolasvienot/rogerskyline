@@ -1,0 +1,76 @@
+cript. Comme ci dessous:
+
+#!/bin/bash
+#
+
+# Nous vidons les chaines predefinies :
+iptables -F
+iptables -t nat -F
+iptables -t mangle -F
+
+# Nous supprimons les regles des chaines personnelles :
+iptables -X 
+iptables -t nat -X
+iptables -t mangle -X
+
+# Nous les faisons pointer par déut sur DROP
+
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+
+#Autorise les rénses
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+
+# On autorise le ping
+iptables -A OUTPUT -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -p icmp -m limit --limit 5/s -j ACCEPT
+
+#(Facultatif : autoriser l'accés au serveur sdepuis l'extérieur)
+iptables -A INPUT -p TCP --dport ssh -i eth0 -j ACCEPT
+iptables -A INPUT -p TCP --dport http -i eth0 -j ACCEPT
+iptables -A INPUT -p TCP --dport 64738 -i eth0 -j ACCEPT
+iptables -A INPUT -p UDP --dport 64738 -i eth0 -j ACCEPT
+
+# anti scan
+iptables -A INPUT -i eth0 -p tcp --tcp-flags FIN,URG,PSH FIN,URG,PSH -j DROP
+iptables -A INPUT -i eth0 -p tcp --tcp-flags ALL ALL -j DROP
+iptables -A INPUT -i eth0 -p tcp --tcp-flags ALL NONE -j DROP
+iptables -A INPUT -i eth0 -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+iptables -A INPUT -i eth0 -p tcp --tcp-flags SYN,ACK,FIN,RST RST -j DROP
+
+#Make sure NEW incoming tcp connections are SYN packets
+iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+
+#Packets with incoming fragments
+iptables -A INPUT -f -j DROP
+
+#incoming malformed XMAS packets
+iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
+
+#Incoming malformed NULL packets
+iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+
+
+#Autoriser DNS
+iptables -A INPUT --protocol udp --source-port 53 -j ACCEPT
+iptables -A OUTPUT --protocol udp --destination-port 53 -j ACCEPT
+
+#Sortie web
+iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -j ACCEPT
+
+#Autoriser sortie FTP
+iptables -A OUTPUT -p tcp --dport 21 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 20 -j ACCEPT
+
+iptables -t filter -A OUTPUT -p udp --dport 161 -j ACCEPT
+iptables -t filter -A INPUT -p udp --dport 161 -j ACCEPT
+
+
+#Regles de secu
+iptables -A INPUT -p all -j DROP
+iptables -A OUTPUT -p all -j DROP
+iptables -A FORWARD -p all -j DROP
