@@ -1,0 +1,26 @@
+-- Region
+Language : english
+Zone : France
+Keyboard : American english
+-- Admin
+Hostname : roger
+Domain : 42.fr
+Password root : niconico
+-- Account non-admin
+Full name : nicolasvienot
+Username : nvienot
+Password : niconico
+-- Partition disks
+Type : Manual
+1st partition : 4.5gb, primary, beggining, ext4, mounted on /
+2nd partition : 1gb, primary, beggining, swap
+3rd partition : rest, primary, ext4, mounted on /home
+-- Package manager
+Country : France
+Mirror : ftp.fr.debian.org
+-- Config
+HTTP proxy : no
+Software selection : Select [SSH server] [Standard system utilities]
+Instal the GRUB boot loader : yes
+
+DONE
