@@ -5,15 +5,30 @@ sender = root@42.fr
 [sshd]
 port = 55555
 enabled = true
-maxretry = 5
+maxretry = 4
 findtime = 120
+#ban 1min
 bantime = 60
 logpath = /var/log/auth.log
+
+[http-get-dos]
+enabled = true
+port = http,https
+filter = http-get-dos
+logpath = /var/log/server.log
+maxretry = 200
+findtime = 300
+#ban for 5 minutes
+bantime = 600
+#each get is 1, max 200 in 300s
+action = iptables[name=HTTP, port=http, protocol=tcp]
 
 [sshd-ddos]
 port = 55555
 enabled = true
-logpath  = /var/log/auth.log
+filter = sshd-ddos
+logpath = /var/log/auth.log
+maxretry = 2
 
 [recidive]
 enabled = true
@@ -24,32 +39,23 @@ port = http,https
 filter = apache-auth
 maxretry = 6
 findtime = 600
-logpath  = /var/log/auth.log
+#ban for 5 minutes
+bantime = 600
+logpath = /var/log/server.log
 
 [apache-noscript]
 enabled = true
-logpath  = /var/log/auth.log
+logpath = /var/log/server.log
 
 [apache-overflows]
-enabled  = true
-port     = http,https
-filter   = apache-overflows
-maxretry = 2
-logpath  = /var/log/auth.log
-
-[apache-badbots]
-enabled  = true
-port     = http,https
-filter   = apache-badbots
-maxretry = 2
-logpath  = /var/log/auth.log
-
-[http-get-dos]
 enabled = true
 port = http,https
-filter = http-get-dos
-logpath  = /var/log/auth.log
-maxretry = 100
-findtime = 300
-bantime = 300
-action = iptables[name=HTTP, port=http, protocol=tcp]
+filter = apache-overflows
+maxretry = 2
+logpath = /var/log/server.log
+
+[apache-badbots]
+enabled = true
+port = http,https
+filter = apache-badbots
+logpath = /var/log/server.log

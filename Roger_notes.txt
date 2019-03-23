@@ -385,3 +385,29 @@ sudo netstat -paunt
 
 APACHE ATTENTION :
 sudo systemctl reload apache2
+
+
+
+
+DHCP?
+-- 
+
+
+
+ ss -tulnp PORTS AAAAB3NzaC1yc2EAAAADAQABAAABAQDCD65OtBIYbHudKa0hsDJgEgSDjrjI
+
+
+
+
+ service --status-all
+
+
+
+ https://fr-wiki.ikoula.com/fr/Se_prot%C3%A9ger_contre_le_scan_de_ports_avec_portsentry
+
+ trouver ipbannies iptables -L -n -v
+
+ check ban
+ sudo iptables -S
+
+ sudo tail -n 5 /var/log/syslog PORTSENTRY

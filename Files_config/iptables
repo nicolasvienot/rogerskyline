@@ -21,6 +21,21 @@ sudo iptables -P INPUT DROP
 sudo iptables -P FORWARD DROP
 sudo iptables -P OUTPUT DROP
 
+
+#PORT SCAN
+sudo iptables -A INPUT -p TCP -m state --state NEW -m recent --set
+sudo iptables -A INPUT -p TCP -m state --state NEW -m recent --update --seconds 1 --hitcount 10 -j DROP
+
+#DOS - This rule limits the ammount of connections from the same IP in a short time
+sudo iptables -I INPUT -p TCP --dport ${SSH_PORT} -i enp0s3 -m state --state NEW -m recent --set
+sudo iptables -I INPUT -p TCP --dport ${SSH_PORT} -i enp0s3 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
+sudo iptables -I INPUT -p TCP --dport ${HTTP_PORT} -i enp0s3 -m state --state NEW -m recent --set
+sudo iptables -I INPUT -p TCP --dport ${HTTP_PORT} -i enp0s3 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
+sudo iptables -I INPUT -p TCP --dport ${HTTPS_PORT} -i enp0s3 -m state --state NEW -m recent --set
+sudo iptables -I INPUT -p TCP --dport ${HTTPS_PORT} -i enp0s3 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
+sudo iptables -I INPUT -p TCP --dport ${SMTP_PORT} -i enp0s3 -m state --state NEW -m recent --set
+sudo iptables -I INPUT -p TCP --dport ${SMTP_PORT} -i enp0s3 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
+
 #Keeping connections already ESTABLISHED
 sudo iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
@@ -49,16 +64,4 @@ sudo iptables -t filter -A OUTPUT -p tcp --dport 25 -j ACCEPT
 sudo iptables -t filter -A INPUT -p icmp -j ACCEPT
 sudo iptables -t filter -A OUTPUT -p icmp -j ACCEPT
 
-#PORT SCAN
-sudo iptables -A INPUT -p TCP -m state --state NEW -m recent --set
-sudo iptables -A INPUT -p TCP -m state --state NEW -m recent --update --seconds 1 --hitcount 10 -j DROP
-
-#DOS - This rule limits the ammount of connections from the same IP in a short time
-sudo iptables -I INPUT -p TCP --dport ${SSH_PORT} -i enp0s3 -m state --state NEW -m recent --set
-sudo iptables -I INPUT -p TCP --dport ${SSH_PORT} -i enp0s3 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
-sudo iptables -I INPUT -p TCP --dport ${HTTP_PORT} -i enp0s3 -m state --state NEW -m recent --set
-sudo iptables -I INPUT -p TCP --dport ${HTTP_PORT} -i enp0s3 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
-sudo iptables -I INPUT -p TCP --dport ${HTTPS_PORT} -i enp0s3 -m state --state NEW -m recent --set
-sudo iptables -I INPUT -p TCP --dport ${HTTPS_PORT} -i enp0s3 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
-sudo iptables -I INPUT -p TCP --dport ${SMTP_PORT} -i enp0s3 -m state --state NEW -m recent --set
-sudo iptables -I INPUT -p TCP --dport ${SMTP_PORT} -i enp0s3 -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
+exit 0

@@ -2,17 +2,15 @@ IPTABLES
 
 1. Connect to VM with username
 2. Add "iptables" in /etc/network/if-pre-up.d/iptables
-3. sudo chmod -x /etc/networks/if-pre-up.d/iptables
-4. sudo sh /etc/networks/if-pre-up.d/iptables
+3. sudo chmod -x /etc/network/if-pre-up.d/iptables
+4. sudo sh /etc/network/if-pre-up.d/iptables
 
 FAIL2BAN
 
--- log_paths to create
-sudo touch /var/log/apache2/server.log
-sudo touch /var/log/apache2/server.log
-sudo touch /var/log/apache2/server.log
-
+-- create log_paths if needed
 sudo vim /etc/fail2ban/jail.local
 sudo vim /etc/fail2ban/filter.d/http-get-dos.conf
 
-Sudo iptables -L
+sudo systemctl restart fail2ban.service
+sudo reboot
+sudo iptables -L
