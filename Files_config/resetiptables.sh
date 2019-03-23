@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #Flush iptables
 sudo iptables -F
 sudo iptables -X
@@ -7,4 +9,4 @@ sudo iptables -t mangle -F
 sudo iptables -t mangle -X
 sudo iptables -P INPUT ACCEPT
 sudo iptables -P FORWARD ACCEPT
-sudo iptables -P OUTPUT ACCEPT:X
+sudo iptables -P OUTPUT ACCEPT
