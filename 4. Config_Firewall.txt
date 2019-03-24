@@ -1,9 +1,9 @@
 IPTABLES
 
 1. Connect to VM with username
-2. Add "iptables" in /etc/network/if-pre-up.d/iptables
-3. sudo chmod -x /etc/network/if-pre-up.d/iptables
-4. sudo sh /etc/network/if-pre-up.d/iptables
+2. Add "bestiptables" in /etc/network/if-pre-up.d/
+3. sudo chmod -x /etc/network/if-pre-up.d/bestiptables
+4. sudo sh /etc/network/if-pre-up.d/bestiptables
 
 FAIL2BAN
 
