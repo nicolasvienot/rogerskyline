@@ -5,11 +5,11 @@ Keyboard : American english
 -- Admin
 Hostname : roger
 Domain : 42.fr
-Password root : niconico
+Password root : xxxxxx
 -- Account non-admin
-Full name : nicolasvienot
-Username : nvienot
-Password : niconico
+Full name : xxxxxx
+Username : xxx
+Password : xxxxxx
 -- Partition disks
 Type : Manual
 1st partition : 4.5gb, primary, beggining, ext4, mounted on /
