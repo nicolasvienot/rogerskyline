@@ -8,9 +8,12 @@ IPTABLES
 FAIL2BAN
 
 -- create log_paths if needed
-sudo vim /etc/fail2ban/jail.local
-sudo vim /etc/fail2ban/filter.d/http-get-dos.conf
+-- sudo vim /etc/fail2ban/jail.local
+#a completer avec propres regles basiques
+-- sudo systemctl restart fail2ban.service
+-- sudo reboot
+-- sudo iptables -L
+-- sudo iptables -S
 
-sudo systemctl restart fail2ban.service
-sudo reboot
-sudo iptables -L
+POSTSENTRY
+https://fr-wiki.ikoula.com/fr/Se_prot%C3%A9ger_contre_le_scan_de_ports_avec_portsentry

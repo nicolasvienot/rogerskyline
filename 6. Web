@@ -1,5 +1,5 @@
 1. Générer une nouvelle clé SSL
--- sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/roger-skyline.com.key -out /etc/ssl/certs/roger-skyline.com.crt
+-- sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/rogernico.com.key -out /etc/ssl/certs/rogernico.com.crt
 sudo vim /etc/apache2/sites-available/default-ssl.conf
 -- sudo apachectl configtest
 -- sudo a2enmod ssl
@@ -7,5 +7,7 @@ sudo vim /etc/apache2/sites-available/default-ssl.conf
 -- sudo systemctl restart apache2.service
 -- sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/001-default.conf
 -- sudo vim /etc/apache2/sites-available/001-default.conf
--- sudo chown -R /var/www/html
+-- a2dissite 000-default.conf
+-- a2ensite 001-default.conf
+-- systemctl reload apache2
 

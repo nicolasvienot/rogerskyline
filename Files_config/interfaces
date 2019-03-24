@@ -11,8 +11,7 @@ iface lo inet loopback
 allow-hotplug enp0s3
 iface enp0s3 inet static
 #address/broadcast/gateway need to be changed depending on cluster
-#address : choose anything from 10.12.0.0 to 10.12.255.255
-address 10.12.123.123
+address 10.12.124.124
 netmask 255.255.255.252
 broadcast 10.12.255.255
 gateway 10.12.254.254

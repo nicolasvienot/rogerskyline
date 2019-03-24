@@ -1,0 +1,7 @@
+Implement scripts on a folder and modify /etc/crontab
+
+Configure sendmail
+-- sudo sendmailconfig
+-- sudo service apache2 restart
+Create a file mail.txt with content
+Test : -- sudo sendmail xxxx@xxx.com < /home/xxx/email.txt
