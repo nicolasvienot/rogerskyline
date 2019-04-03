@@ -4,8 +4,8 @@
 -- apt-get install sudo vim iptables-persistent fail2ban sendmail apache2 portsentry
 -- adduser X
 -- adduser X sudo
--- replace > with own | etc/ssh/sshd_config (modify password autentification to 'yes')
 -- replace > with own | etc/network/interface
+-- replace > with own | etc/ssh/sshd_config (modify password autentification to 'yes')
 -- reboot
 3. On host (iTerm2)
 -- ssh-keygen
