@@ -1,10 +1,10 @@
 1. Connect to VM with previous login/password
 -- su
 -- apt-get update && apt-get upgrade
--- apt-get install sudo vim iptables-persistent fail2ban sendmail apache2
+-- apt-get install sudo vim iptables-persistent fail2ban sendmail apache2 portsentry
 -- adduser X
 -- adduser X sudo
--- replace > with own | etc/ssh/sshd_config (with password autentification yes)
+-- replace > with own | etc/ssh/sshd_config (modify password autentification to 'yes')
 -- replace > with own | etc/network/interface
 -- reboot
 3. On host (iTerm2)
@@ -14,7 +14,7 @@
 -- ssh [USERNAME.VM]@[IP.VM] -p [PORT.SSH.VM]
 -- sudo mkdir .ssh
 -- sudo vim .ssh/authorized_keys -> paste pub key 
--- replace password autentification yes to no on etc/ssh/sshd_config
+-- replace password autentification 'yes' to 'no' on etc/ssh/sshd_config
 -- sudo service ssh restart
 
 DONE
