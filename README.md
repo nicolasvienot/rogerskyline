@@ -98,6 +98,36 @@ $> sudo iptables -S
 
 https://fr-wiki.ikoula.com/fr/Se_prot%C3%A9ger_contre_le_scan_de_ports_avec_portsentry
 
+### Try attack DOS with SlowLoris
+
+##### Download SlowLoris from current repository
+
+Try using commands on host :
+```bash
+$> perl slowloris.pl -dns [STATIC IP VM] -port [SSH PORT VM]
+$> perl slowloris.pl -dns [STATIC IP VM] -port 80
+$> perl slowloris.pl -dns [STATIC IP VM] -port 443
+$> perl slowloris.pl -dns [STATIC IP VM] -port 25
+```
+
+##### Slowloris should not be able to send any packets and IP should be banned from VM (see logs portsentry and iptbles)
+
+### Try ports scan with nmap
+
+##### Clone your VM and change IP and PORT
+
+```bash
+$> sudo aptget install nmap
+```
+
+##### Try using it
+
+```bash
+$> nmap -Pn [IP_VM_TO_TEST]
+$> nmap [IP_VM_TO_TEST]
+```
+##### Nmap should not be able to scan your ports and IP trying to scan should be banned (see logs portsentry and iptbles)
+
 ## Scripts
 
 ##### Implement scripts on a folder and modify /etc/crontab
