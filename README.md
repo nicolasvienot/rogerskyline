@@ -40,26 +40,28 @@ Instal the GRUB boot loader : yes
 1. Connect to VM with previous login/password
 ```bash
 $> su
-$> su
-$> su
+$> apt-get update && apt-get upgrade
+$> apt-get install sudo vim iptables-persistent fail2ban sendmail apache2 portsentry
+$> adduser (your non-admin user) sudo
+$> replace > with own | etc/network/interface -> choose your IP
+$> replace > with own | etc/ssh/sshd_config (modify password autentification to 'yes') -> choose your port
+$> reboot
 ```
--- su
--- apt-get update && apt-get upgrade
--- apt-get install sudo vim iptables-persistent fail2ban sendmail apache2 portsentry
--- adduser X
--- adduser X sudo
--- replace > with own | etc/network/interface
--- replace > with own | etc/ssh/sshd_config (modify password autentification to 'yes')
--- reboot
-3. On host (iTerm2)
--- ssh-keygen
--- cat ~/.ssh/id_rsa.pub
--- Save key
--- ssh [USERNAME.VM]@[IP.VM] -p [PORT.SSH.VM]
--- sudo mkdir .ssh
--- sudo vim .ssh/authorized_keys -> paste pub key 
--- replace password autentification 'yes' to 'no' on etc/ssh/sshd_config
--- sudo service ssh restart
+3. On host
+```bash
+$> ssh-keygen
+$> cat ~/.ssh/id_rsa.pub
+```
+Copy keygen
+```bash
+$> ssh [VMUSERNAME]@[VMIP] -p [VMSSHPORT]
+$> sudo mkdir .ssh
+$> sudo vim .ssh/authorized_keys -> paste pub key 
+$> sudo vim /etc/ssh/sshd_config (replace password autentification 'yes' to 'no')
+$> sudo service ssh restart
+$> sudo reboot
+```
+You can now access your VM with ssh [VMUSERNAME]@[VMIP] -p [VMSSHPORT] without using password and with pubkeys. Root can't access.
 
 ### Configure Firewall
 ### Scripts
