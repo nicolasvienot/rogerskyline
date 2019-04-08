@@ -37,7 +37,7 @@ Instal the GRUB boot loader : yes
 
 ### Configure SSH
 
-1. Connect to VM with previous login/password
+##### Connect to VM with previous login/password
 ```bash
 $> su
 $> apt-get update && apt-get upgrade
@@ -47,12 +47,12 @@ $> replace > with own | etc/network/interface -> choose your IP
 $> replace > with own | etc/ssh/sshd_config (modify password autentification to 'yes') -> choose your port
 $> reboot
 ```
-3. On host
+##### On host
 ```bash
 $> ssh-keygen
 $> cat ~/.ssh/id_rsa.pub
 ```
-Copy keygen
+##### Copy keygen
 ```bash
 $> ssh [VMUSERNAME]@[VMIP] -p [VMSSHPORT]
 $> sudo mkdir .ssh
@@ -67,20 +67,3 @@ You can now access your VM with ssh [VMUSERNAME]@[VMIP] -p [VMSSHPORT] without u
 ### Scripts
 ### Web server && SSL
 ### Deployment
-
-```bash
-$> git clone https://github.com/nicolasvienot/fractol.git Fractol
-```
-
-### Compiling
-
-```bash
-$> make
-```
-
-### Running
-
-```bash
-$> ./fractol [fractal name]
-```
-
