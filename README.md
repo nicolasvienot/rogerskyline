@@ -98,7 +98,7 @@ $> sudo iptables -S
 
 https://fr-wiki.ikoula.com/fr/Se_prot%C3%A9ger_contre_le_scan_de_ports_avec_portsentry
 
-### Try attack DOS with SlowLoris
+### Try DOS attack with SlowLoris
 
 ##### Download SlowLoris from current repository
 
