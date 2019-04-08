@@ -10,27 +10,27 @@ debian-9.8.0-amd64-netinst
 
 ### Install Debian
 
--- Region
+##### Region
 Language : english
 Zone : France
 Keyboard : American english
--- Admin
+##### Admin
 Hostname : roger
 Domain : 42.fr
 Password root : xxxxxx
--- Non-admin account
+##### Non-admin account
 Full name : xxxx
 Username : xxxx
 Password : xxxx
--- Partition disks
+##### Partition disks
 Type : Manual
 1st partition : 4.5gb, primary, beggining, ext4, mounted on /
 2nd partition : 1gb, primary, beggining, swap
 3rd partition : rest, primary, ext4, mounted on /home
--- Package manager
+##### Package manager
 Country : France
 Mirror : ftp.fr.debian.org
--- Config
+##### Config
 HTTP proxy : no
 Software selection : Select [SSH server] [Standard system utilities]
 Instal the GRUB boot loader : yes
