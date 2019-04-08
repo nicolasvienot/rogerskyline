@@ -15,18 +15,18 @@ Language : english
 Zone : France
 Keyboard : American english
 ##### Admin
-Hostname : roger
-Domain : 42.fr
-Password root : xxxxxx
+Hostname : roger <br>
+Domain : 42.fr <br>
+Password root : xxxxxx <br>
 ##### Non-admin account
 Full name : xxxx
 Username : xxxx
 Password : xxxx
 ##### Partition disks
 Type : Manual
-1st partition : 4.5gb, primary, beggining, ext4, mounted on /
-2nd partition : 1gb, primary, beggining, swap
-3rd partition : rest, primary, ext4, mounted on /home
+1st partition : 4.5gb, primary, beggining, ext4, mounted on / <br>
+2nd partition : 1gb, primary, beggining, swap <br>
+3rd partition : rest, primary, ext4, mounted on /home <br>
 ##### Package manager
 Country : France
 Mirror : ftp.fr.debian.org
