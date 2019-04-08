@@ -8,7 +8,7 @@ Install Virtual Box
 
 debian-9.8.0-amd64-netinst
 
-### Install Debian
+## Install Debian
 
 ##### Region
 Language : english
@@ -35,7 +35,7 @@ HTTP proxy : no
 Software selection : Select [SSH server] [Standard system utilities]
 Instal the GRUB boot loader : yes
 
-### Configure SSH
+## Configure SSH
 
 ##### Connect to VM with previous login/password
 ```bash
@@ -63,7 +63,7 @@ $> sudo reboot
 ```
 You can now access your VM with ssh [VMUSERNAME]@[VMIP] -p [VMSSHPORT] without using password and with pubkeys. Root can't access.
 
-### Configure Firewall
-### Scripts
-### Web server && SSL
-### Deployment
+## Configure Firewall
+## Scripts
+## Web server && SSL
+## Deployment
