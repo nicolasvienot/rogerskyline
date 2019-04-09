@@ -54,7 +54,7 @@ $> cat ~/.ssh/id_rsa.pub
 ```
 ##### Copy keygen
 ```bash
-$> ssh [VMUSERNAME]@[VMIP] -p [VMSSHPORT]
+$> ssh [VM_USERNAME]@[VM_IP] -p [VM_SSH_PORT]
 $> sudo mkdir .ssh
 $> sudo vim .ssh/authorized_keys -> paste pub key 
 $> sudo vim /etc/ssh/sshd_config (replace password autentification 'yes' to 'no')
