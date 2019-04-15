@@ -68,7 +68,8 @@ You can now access your VM with ssh [VMUSERNAME]@[VMIP] -p [VMSSHPORT] without u
 ### Configure IPTABLES
 
 ##### Connect to VM with username
-##### Add "bestiptables" in /etc/network/if-pre-up.d/
+##### Add "bestiptables" in /etc/network/if-pre-up.d/ -> careful, don't put any extension!
+
 
 ```bash
 $> sudo chmod -x /etc/network/if-pre-up.d/bestiptables
