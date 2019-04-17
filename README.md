@@ -43,8 +43,8 @@ $> su
 $> apt-get update -y && apt-get upgrade -y
 $> apt-get install sudo vim iptables-persistent fail2ban sendmail apache2 portsentry
 $> adduser [your_non-admin_user] sudo
-$> replace > with own [check Files_config] | etc/network/interface -> choose your IP
-$> replace > with own [check Files_config] | etc/ssh/sshd_config (modify password authentification to 'yes') -> choose your port
+$> replace etc/network/interface with file in [Files_config] + choose your IP
+$> replace etc/ssh/sshd_config with file in [Files_config] + modify password authentification to 'yes' + choose your port
 $> reboot
 ```
 ##### On host
