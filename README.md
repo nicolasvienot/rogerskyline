@@ -40,7 +40,7 @@ Instal the GRUB boot loader : yes <br>
 ##### Connect to VM with previous login/password
 ```bash
 $> su
-$> apt-get update && apt-get upgrade
+$> apt-get update -y && apt-get upgrade -y
 $> apt-get install sudo vim iptables-persistent fail2ban sendmail apache2 portsentry
 $> adduser [your_non-admin_user] sudo
 $> replace > with own [check Files_config] | etc/network/interface -> choose your IP
