@@ -14,3 +14,14 @@ Requirements:
 
 Done
 Laera Loris
+
+TO TEST YOUR VM :
+
+Try using command :
+perl slowloris.pl -dns [STATIC IP VM] -port [SSH PORT VM]
+perl slowloris.pl -dns [STATIC IP VM] -port 80
+perl slowloris.pl -dns [STATIC IP VM] -port 443
+
+Slowloris should not be able to send any packets and IP should be banned from VM.
+
+nvienot
