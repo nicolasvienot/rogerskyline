@@ -72,7 +72,7 @@ You can now access your VM with ssh [VMUSERNAME]@[VMIP] -p [VMSSHPORT] without u
 
 
 ```bash
-$> sudo chmod -x /etc/network/if-pre-up.d/bestiptables
+$> sudo chmod 777 /etc/network/if-pre-up.d/bestiptables
 $> sudo sh /etc/network/if-pre-up.d/bestiptables
 $> sudo reboot
 ```
