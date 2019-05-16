@@ -4,6 +4,11 @@
 
 Install Virtual Box
 
+Link Virtual Box to your sgoinfre
+Create a folder [yourlogin]/VM in the sgoinfre and give right access to it.
+Virtual Box -> Preferences -> General -> Default Machine Folder :
+/sgoinfre/goinfre/Perso/[your login]/VM
+
 ### Debian Version
 
 debian-9.8.0-amd64-netinst
