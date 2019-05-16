@@ -57,7 +57,7 @@ $> reboot
 $> ssh-keygen
 $> cat ~/.ssh/id_rsa.pub
 ```
-##### Copy keygen
+##### Copy pubkey and paste it in :
 ```bash
 $> ssh [VM_USERNAME]@[VM_IP] -p [VM_SSH_PORT]
 $> sudo mkdir .ssh
@@ -66,6 +66,8 @@ $> sudo vim /etc/ssh/sshd_config (replace password autentification 'yes' to 'no'
 $> sudo service ssh restart
 $> sudo reboot
 ```
+Or simply use : ssh-copy-id -i id_rsa.pub [VM_USERNAME]@[VM_IP] -p [VM_SSH_PORT] to copy/paste your pubkey
+
 You can now access your VM with ssh [VMUSERNAME]@[VMIP] -p [VMSSHPORT] without using password and with pubkeys. Root can't access.
 
 ## Configure Firewall
