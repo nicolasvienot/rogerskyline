@@ -5,6 +5,7 @@
 ### Install and configure Virtual Box
 
 Install Virtual Box
+
 Link Virtual Box to your sgoinfre
 Create a folder [your_login]/VM in the sgoinfre and give right access to it
 Go to Virtual Box -> Preferences -> General -> Default Machine Folder and put :
