@@ -94,7 +94,7 @@ $> sudo reboot
 ##### create log_paths if needed
 
 ```bash
-$> sudo vim /etc/fail2ban/jail.local -> complete with own rules
+$> sudo vim /etc/fail2ban/jail.local -> complete with your own rules
 $> sudo systemctl restart fail2ban.service
 $> sudo reboot
 ```
