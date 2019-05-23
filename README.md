@@ -2,12 +2,17 @@
 
 ## Getting Started
 
-Install Virtual Box
+### Install and configure Virtual Box
 
+Install Virtual Box
 Link Virtual Box to your sgoinfre
-Create a folder [yourlogin]/VM in the sgoinfre and give right access to it.
-Virtual Box -> Preferences -> General -> Default Machine Folder :
+Create a folder [your_login]/VM in the sgoinfre and give right access to it
+Go to Virtual Box -> Preferences -> General -> Default Machine Folder and put :
 /sgoinfre/goinfre/Perso/[your login]/VM
+
+### Create VM
+
+Create a new VM, using Debian and with Bridge network, then launch your new VM and select your debian iso.
 
 ### Debian Version
 
